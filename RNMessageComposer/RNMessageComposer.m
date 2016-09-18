@@ -112,6 +112,34 @@ RCT_EXPORT_METHOD(composeMessageWithArgs:(NSDictionary *)args callback:(RCTRespo
     {
         mcvc.body = [RCTConvert NSString:args[@"messageText"]];
     }
+
+    if([MFMessageComposeViewController canSendAttachments]) {
+        if(args[@"attachments"])
+        {
+            if([args[@"attachments"] isKindOfClass:[NSArray class]])
+            {
+                NSArray *attachments = args[@"attachments"];
+                for(id attachment in attachments)
+                {
+                    if([attachment isKindOfClass:[NSDictionary class]])
+                    {
+                        if ([attachment objectForKey:@"url"] && [attachment objectForKey:@"typeIdentifier"])
+                        {
+                            NSURL *url = [NSURL URLWithString:[attachment objectForKey:@"url"]];
+                            NSString *typeIdentifier = [attachment objectForKey:@"typeIdentifier"];
+                            NSString *filename = [attachment objectForKey:@"filename"];
+
+                            if (![mcvc addAttachmentData:[NSData dataWithContentsOfURL:url]
+                                       typeIdentifier:typeIdentifier
+                                             filename:filename]) {
+                                NSLog(@"attachment failed to add: %@", attachment);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     UIViewController *vc = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     [vc presentViewController:mcvc animated:YES completion:nil];

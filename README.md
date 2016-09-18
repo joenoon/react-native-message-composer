@@ -16,7 +16,20 @@ The args object is required and lets you prepopulate the MFMessageComposeViewCon
 recipients - an array of strings
 subject - string
 messageText - string
+attachments - an array of objects
 ```
+
+attachments array:
+```js
+  [
+    {
+      url: 'http://...',               // required
+      typeIdentifier: 'public.jpeg',   // required
+      filename: 'pic.jpg',             // optional
+     }
+  ]
+```
+For `typeIdentifier` see https://developer.apple.com/library/content/documentation/Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html
 
 The following shows an example args object
 
@@ -113,7 +126,6 @@ Composer.composeMessageWithArgs(
 
 ## TODO
 
-- [ ] Add support for message attachments
 - [ ] Fix issue with a second MFMessageComposeViewController seeming to be present if rotate device whilst MFMessageComposeViewController is open
 - [ ] Look at implementing MFMessageComposeViewControllerTextMessageAvailabilityDidChangeNotification to listen for changes to the MFMessageComposeViewController `canSendText` class method
 
